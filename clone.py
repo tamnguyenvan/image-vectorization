@@ -3,6 +3,8 @@ import shutil
 import subprocess
 from pathlib import Path
 
+OUTPUT_DIR = "gemini_files"
+
 def should_ignore(path, ignore_list):
     """Check if the given path should be ignored based on ignore list."""
     path = str(path).lower()
@@ -25,7 +27,7 @@ def convert_files_to_txt(directory, extensions, ignore_list=None):
     extensions = [ext.lower() for ext in extensions]
     
     # Create output directory if it doesn't exist
-    output_dir = os.path.join(directory, 'gemini_files')
+    output_dir = os.path.join(directory, OUTPUT_DIR)
     os.makedirs(output_dir, exist_ok=True)
     
     # Walk through the directory
@@ -68,7 +70,7 @@ def convert_files_to_txt(directory, extensions, ignore_list=None):
                 except Exception as e:
                     print(f"Error converting {src_path}: {str(e)}")
 
-def generate_project_structure(directory, output_file='project_structure.md'):
+def generate_project_structure(directory, output_file=f'{OUTPUT_DIR}/project_structure.md'):
     """
     Generate a markdown file containing the project structure using the 'tree' command.
     
@@ -129,7 +131,7 @@ if __name__ == "__main__":
     
     # Generate project structure
     print("Generating project structure...")
-    if generate_project_structure(target_directory):
+    if generate_project_structure(target_directory, "ge"):
         # Only proceed with conversion if project structure was generated successfully
         convert_files_to_txt(target_directory, extensions_to_convert, ignore_list)
         print(f"\nConversion completed. Files saved to: {os.path.join(target_directory, 'gemini_files')}")
